@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/zkc123/controller/common"
 	"github.com/zkc123/controller/user"
 	"github.com/zkc123/middler/jwt"
 	// "github.com/zkc123/middler/logs"
@@ -11,8 +12,7 @@ import (
 )
 func Route(router *gin.Engine) {
 	fmt.Println("start router...")
-	r:=router.Group("/test",jwt.Auth("mysecret"))
-	r.GET("/txt",test.Test)
+	router.GET("/test/txt",test.Test)
 	
 }
 func RouteJwt(route *gin.Engine)  {
@@ -22,10 +22,11 @@ func RouteJwt(route *gin.Engine)  {
 }
 func RouterUser(router *gin.Engine){
 	fmt.Println("user user router")
-	r:=router.Group("/user",jwt.Auth("mysecret"))
+	r:=router.Group("/user",jwt.RefreshTokenCookie)
 	{
 		r.POST("/signin",user.Signin)//登录
 		r.POST("/signup",user.Signup)//注册
 		r.GET("/",test.Test)
+		r.POST("/upload",common.UploadHandler)
 	}
 }

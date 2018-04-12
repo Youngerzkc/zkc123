@@ -84,7 +84,7 @@ func Signup(c *gin.Context){
 		return 
 	}		
 	var user *model.User
-	userDao:=dao.User{}
+	userDao:=&dao.User{}
 	user.Pass=dao.EncryptPassword(userData.Password,userDao.Salt())
 	user.Name=userData.Name
 	user.Create=time.Now()

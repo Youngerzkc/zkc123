@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-    gin.SetMode("release")
+    // gin.SetMode("release")
 	var outLog io.Writer
 	var fileLog string="/tmp/zkc123.log"
 	outLog=logs.FileLogs(fileLog)
