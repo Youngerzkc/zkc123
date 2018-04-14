@@ -1,6 +1,6 @@
 #image目录下文件不上传
-./image/
+image/
 #databases is not upload
-./databases/*
+databases/*
 #question is not upload
-./question
+question
