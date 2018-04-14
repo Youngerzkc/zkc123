@@ -39,8 +39,6 @@ func SaveUserMysql(user *model.User ) error{
 	var err error
 	var newUser User
 	if err=DB.Where("name=?",user.Name).Find(&newUser).Error;err!=nil{
-		//不存在记录就插入数据
-		// fmt.Println("存在码")
 		err=DB.Save(user).Error
 		return err
 	} else {
@@ -66,6 +64,17 @@ func SelectUserMysql(name string)error{
 		return err
 	} 
 	return nil
+}
+//修改用户密码
+func UpdateUserMysql(user *model.User)error{
+	var err error
+	var newUser model.User
+	fmt.Println("修改密码")
+	if err=DB.Where("name=?",user.Name).Find(&newUser).Error;err!=nil{
+		return err
+	}
+	newUser.Pass=user.Pass
+	return 	SaveUserMysql(&newUser)
 }
 //给密码加密
 func EncryptPassword(password ,salt string) (hash string)  {

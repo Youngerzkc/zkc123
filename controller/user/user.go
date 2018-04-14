@@ -23,7 +23,7 @@ func Signin(c *gin.Context){
 	 var signinInput string
 	 var password string
 	 fmt.Println("parmars is ",c.Query("loginType"))
-	if c.Query("loginType")=="username"{
+	 if c.Query("loginType")=="username"{
 		if err:=c.ShouldBindWith(&userNameLogin,binding.JSON);err!=nil{
 			fmt.Println(err.Error())
 			fmt.Println("name iss isi", userNameLogin.SigninInput)
@@ -104,7 +104,7 @@ func Signup(c *gin.Context){
 }
 //用户退出
 func Signout(c *gin.Context) {
-	fmt.Println("用户退出")
+		fmt.Println("用户退出")
 		
 }
 //修改用户资料

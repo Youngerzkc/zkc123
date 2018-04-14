@@ -1,6 +1,7 @@
 package router
 
 import (
+	"net/http"
 	"github.com/zkc123/controller/common"
 	"github.com/zkc123/controller/user"
 	"github.com/zkc123/middler/jwt"
@@ -29,5 +30,7 @@ func RouterUser(router *gin.Engine){
 		r.GET("/",test.Test)
 		r.POST("/upload",common.UploadHandler)//上传图片
 		// r.GET("/catimages",) //查看图片
+		r.StaticFS("/static",http.Dir("./image"))//gin 静态文件
+		
 	}
 }
