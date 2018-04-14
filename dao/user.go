@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"crypto/md5"
 	"fmt"
-	"time"
-	"strconv"
 	"github.com/garyburd/redigo/redis"
 	"github.com/zkc123/model"
 	
@@ -23,24 +21,18 @@ type User model.User
 
 func (user *User)CheckPassWord(password string) bool   {
 	var newUser User
-	if password==""||user.Pass==""{
+	if password==""{
 		return false
 	}
 	if err:=DB.Where("name=?",user.Name).First(&newUser).Error;err!=nil{
 		return false
 	}
-	return EncryptPassword(password,user.Salt())==newUser.Pass
+	    return EncryptPassword(password,newUser.Salt())==newUser.Pass
 }
 func (user *User) Salt() string {
 	var userSalt string
-	if user.Pass==""{
-		userSalt=strconv.Itoa(int(time.Now().Unix()))
-	}else{
-		userSalt=user.Pass
-	}
-	fmt.Println("userSalt ",userSalt)
+	userSalt="helloWorld"
 	return userSalt
-	
 }
 //用户信息保存到mysql数据库
 func SaveUserMysql(user *model.User ) error{
@@ -48,6 +40,7 @@ func SaveUserMysql(user *model.User ) error{
 	var newUser User
 	if err=DB.Where("name=?",user.Name).Find(&newUser).Error;err!=nil{
 		//不存在记录就插入数据
+		// fmt.Println("存在码")
 		err=DB.Save(user).Error
 		return err
 	} else {
@@ -68,6 +61,7 @@ func DeleteUserMysql(name string)error{
 func SelectUserMysql(name string)error{
 	var err error
 	var user User
+	fmt.Println("查找用户信息")
 	if err=DB.Where("name=?",name).Find(&user).Error;err!=nil{
 		return err
 	} 
@@ -77,7 +71,7 @@ func SelectUserMysql(name string)error{
 func EncryptPassword(password ,salt string) (hash string)  {
 	password=fmt.Sprintf("%x",md5.Sum([]byte(password)))
 	hash=salt+password
-	hash=salt+fmt.Sprintf("%x",md5.Sum([]byte(hash)))
+	hash=fmt.Sprintf("%x",md5.Sum([]byte(hash)))
 	fmt.Println("hash ",hash)
 	return hash
 }
@@ -109,7 +103,6 @@ func  UserToRedis(user *model.User) error {
 		return errors.New("error")
 	}
 	return nil
-
 }
 //从redis中取出用户信息
 func UserFromRedis(userID int)(model.User,error){

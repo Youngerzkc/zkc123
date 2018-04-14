@@ -25,7 +25,6 @@ func Signin(c *gin.Context){
 	 fmt.Println("parmars is ",c.Query("loginType"))
 	if c.Query("loginType")=="username"{
 		if err:=c.ShouldBindWith(&userNameLogin,binding.JSON);err!=nil{
-			// fmt.Println("JSON ",binding.JSON)
 			fmt.Println(err.Error())
 			fmt.Println("name iss isi", userNameLogin.SigninInput)
 			fmt.Println("格式化参数")
@@ -44,7 +43,8 @@ func Signin(c *gin.Context){
 	userDao.Pass=password
 	userDao.Name=signinInput
 	fmt.Println("Name is ",signinInput,"password is ",password)
-	if userDao.CheckPassWord(password) ==true  {
+	fmt.Println("userDao.CheckPassWord  ",userDao.CheckPassWord(password))
+	if userDao.CheckPassWord(password) == true  {
 		//检验帐号是否激活 todo
 		token:=jwt_lib.NewWithClaims(jwt_lib.SigningMethodHS256,jwt_lib.MapClaims{
 			"id":user.ID,
@@ -56,8 +56,8 @@ func Signin(c *gin.Context){
 			SendErrJSON("内部错误.",c)
 			return 
 		}
-	 fmt.Println("user token is ",tokenString)
-		c.SetCookie("token",tokenString,100,"/","",true,true)
+	    fmt.Println("user token is ",tokenString)
+	    c.SetCookie("token",tokenString,1<<31,"/","",true,true)
 		c.JSON(http.StatusOK,gin.H{
 			"errNo":200,
 			"msg":"success",
@@ -84,17 +84,15 @@ func Signup(c *gin.Context){
 		return 
 	}		
 	var user *model.User
+	user =new(model.User)
 	userDao:=&dao.User{}
 	user.Pass=dao.EncryptPassword(userData.Password,userDao.Salt())
 	user.Name=userData.Name
 	user.Create=time.Now()
-	
 	if err:=dao.SaveUserMysql(user);err!=nil{
-		SendErrJSON("error",c)
-		fmt.Println("保存数据出错")
+		SendErrJSON("error: "+user.Name +" is exists!!!",c)
 		return 
 	}
-
 	if err:=dao.UserToRedis(user);err!=nil{
 		fmt.Println("filed redis store")
 	}

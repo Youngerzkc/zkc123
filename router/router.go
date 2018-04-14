@@ -27,6 +27,7 @@ func RouterUser(router *gin.Engine){
 		r.POST("/signin",user.Signin)//登录
 		r.POST("/signup",user.Signup)//注册
 		r.GET("/",test.Test)
-		r.POST("/upload",common.UploadHandler)
+		r.POST("/upload",common.UploadHandler)//上传图片
+		// r.GET("/catimages",) //查看图片
 	}
 }
