@@ -1,10 +1,11 @@
 package router
 
 import (
-	"net/http"
+	// "net/http"
 	"github.com/zkc123/controller/common"
 	"github.com/zkc123/controller/user"
 	"github.com/zkc123/middler/jwt"
+	"github.com/zkc123/controller/static"
 	// "github.com/zkc123/middler/logs"
 	"github.com/zkc123/controller/test"
 	"fmt"
@@ -29,8 +30,9 @@ func RouterUser(router *gin.Engine){
 		r.POST("/signup",user.Signup)//注册
 		r.GET("/",test.Test)
 		r.POST("/upload",common.UploadHandler)//上传图片
+		r.POST("uploadfile",common.UploadFileHandler)
 		// r.GET("/catimages",) //查看图片
-		r.StaticFS("/static",http.Dir("./image"))//gin 静态文件
+		r.StaticFS("/static",static.StaticFile("./image"))//gin 静态文件
 		
 	}
 }
