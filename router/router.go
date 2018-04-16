@@ -14,7 +14,7 @@ import (
 )
 func Route(router *gin.Engine) {
 	fmt.Println("start router...")
-	router.GET("/test/txt",test.Test)
+	router.GET("/test/txt",jwt.SigninRequired,test.Test)
 	
 }
 func RouteJwt(route *gin.Engine)  {
@@ -28,9 +28,10 @@ func RouterUser(router *gin.Engine){
 	{
 		r.POST("/signin",user.Signin)//登录
 		r.POST("/signup",user.Signup)//注册
-		r.GET("/",test.Test)
-		r.POST("/upload",common.UploadHandler)//上传图片
-		r.POST("uploadfile",common.UploadFileHandler)
+		r.GET("/",jwt.SigninRequired,test.Test)
+		r.POST("/signout",jwt.SigninRequired,user.Signout)
+		r.POST("/upload",jwt.SigninRequired,common.UploadHandler)//上传图片
+		r.POST("/uploadfile",jwt.SigninRequired,common.UploadFileHandler)
 		// r.GET("/catimages",) //查看图片
 		r.StaticFS("/static",static.StaticFile("./image"))//gin 静态文件
 		

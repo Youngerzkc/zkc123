@@ -34,8 +34,9 @@ func Signin(c *gin.Context){
 		signinInput=userNameLogin.SigninInput
 		password=userNameLogin.Password
 	}
-	var user model.User
-	if err:=dao.SelectUserMysql(signinInput);err!=nil{
+	var user *model.User
+	var err error
+	if user,err =dao.SelectUserMysql(signinInput);err!=nil{
 		SendErrJSON("帐号不存在",c)
 		return 
 	}
@@ -56,8 +57,21 @@ func Signin(c *gin.Context){
 			SendErrJSON("内部错误.",c)
 			return 
 		}
-	    fmt.Println("user token is ",tokenString)
-	    c.SetCookie("token",tokenString,1<<31,"/","",true,true)
+		fmt.Println("登录用户创建 的token user token is ",tokenString)
+		cookie:=&http.Cookie{
+			Name:"token",
+			Value:tokenString,
+			MaxAge:1<<31,
+			Path:"/",
+			Secure:false,//这个参数要研究
+			HttpOnly:false,
+		}
+		http.SetCookie(c.Writer,cookie)
+		// c.SetCookie("token","888888",1<<31,"/","localhost",false,false)
+		if err:= dao.UserToRedis(user);err!=nil{
+			fmt.Println(err.Error())
+			return 
+		}
 		c.JSON(http.StatusOK,gin.H{
 			"errNo":200,
 			"msg":"success",
@@ -105,7 +119,24 @@ func Signup(c *gin.Context){
 //用户退出
 func Signout(c *gin.Context) {
 		fmt.Println("用户退出")
-		
+		var user model.User
+		userInfo,exists:=c.Get("user")
+		fmt.Println("用户退出的信息",userInfo)
+		if exists{
+			user=userInfo.(model.User)
+			RedisCoonn:=dao.RedisPool.Get()
+			defer RedisCoonn.Close()
+			userKey:=fmt.Sprintf("%s%d",dao.LoginUser,user.ID)
+			if _,err:=RedisCoonn.Do("DEL",userKey);err!=nil{
+				fmt.Println("redis delete failed: ",err)
+			}
+			c.JSON(http.StatusOK,gin.H{
+				"errNO":"delete SUCCES",
+				"msg":"SUCCESS",
+				"data":user,
+			})
+		}
+		return 
 }
 //修改用户资料
 

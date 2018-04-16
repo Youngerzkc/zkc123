@@ -1,7 +1,9 @@
 myredis_dir=/home/younger/project/goproject/src/github.com/zkc123/database/myredis
 mysql_dir=/home/younger/project/goproject/src/github.com/zkc123/database/mysql
 
-run:
+
+run: run-docker-mysql run-docker-redis run-main
+run-main:
 	go run main.go
 	#注意mysql数据的持久化
 run-docker-mysql:
@@ -10,5 +12,6 @@ run-docker-mysql:
 run-docker-redis:	
 	docker run  -d  -v $(myredis_dir):/data  -p 6381:6379 redis
 build-images:
-
+	
 run-docker:
+

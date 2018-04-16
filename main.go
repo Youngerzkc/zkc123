@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/zkc123/middler/jwt"
+	// "github.com/zkc123/middler/jwt"
 	"io"
 	"github.com/zkc123/middler/logs"
 	"log"
 	"os/signal"
 	"os"
-	"fmt"
+	// "fmt"
 	"github.com/zkc123/router"
 	"github.com/gin-gonic/gin"
 )
@@ -21,9 +21,9 @@ func main() {
 	r:=gin.Default()
 	r.Use(ginMiddleHandLogs)
 	router.Route(r)
-	fmt.Println("token is ",jwt.CreateToken())
+	// fmt.Println("token is ",jwt.CreateToken())
 	// r.Use(jwt.Auth("mysecret"))
-	// r.Use(gin.Recovery())
+	r.Use(gin.Recovery())
 	// router.RouteJwt(r)
 	router.RouterUser(r)
 	go func()  {

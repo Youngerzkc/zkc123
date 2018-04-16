@@ -63,7 +63,6 @@ func NewWithWriter(out io.Writer) gin.HandlerFunc {
 
 		//127.0.0.1 user-identifier frank [10/Oct/2000:13:55:36 -0700] "GET /apache_pb.gif HTTP/1.0" 200 2326
 		w := pool.Get().(*bytes.Buffer)
-
 		w.Reset()
 		w.WriteString(c.ClientIP())
 		w.WriteString(" - - ")
@@ -78,9 +77,7 @@ func NewWithWriter(out io.Writer) gin.HandlerFunc {
 		w.WriteString(strconv.Itoa(c.Writer.Status()))
 		w.WriteString(" ")
 		w.WriteString(strconv.Itoa(c.Writer.Size()))
-		
 		w.WriteString("\n")
-		
 		w.WriteTo(out)
 		pool.Put(w)
 	}

@@ -56,14 +56,14 @@ func DeleteUserMysql(name string)error{
 	return err
 }
 //查找用户信息
-func SelectUserMysql(name string)error{
+func SelectUserMysql(name string)(*model.User,error){
 	var err error
-	var user User
+	var user model.User
 	fmt.Println("查找用户信息")
 	if err=DB.Where("name=?",name).Find(&user).Error;err!=nil{
-		return err
+		return nil,err
 	} 
-	return nil
+	return &user,nil
 }
 //修改用户密码
 func UpdateUserMysql(user *model.User)error{
@@ -121,6 +121,7 @@ func UserFromRedis(userID int)(model.User,error){
 	defer redisConn.Close()
 	userBytes,err:=redis.Bytes(redisConn.Do("GET",loginUser))
 	if err!=nil{
+		fmt.Println("未从redis 获取到数据")
 		return user ,errors.New("未登录")
 	}
 	bytesErr:=json.Unmarshal(userBytes,&user)
@@ -128,6 +129,7 @@ func UserFromRedis(userID int)(model.User,error){
 		fmt.Println(bytesErr)
 		return user,errors.New("未登录")
 	}
+	fmt.Println("get redis user  ",user)
 	return user,nil
 }
 func init(){
