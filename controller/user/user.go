@@ -17,11 +17,13 @@ func Signin(c *gin.Context){
 	type UserNameLogin struct{
 		SigninInput string `json:"signinInput" binding:"required,min=4,max=20"`
 		Password string `json:"password" binding:"required,min=6,max=20"`
+		// LoginType string `json:"loginType" binding:"required"`
 	}
-
+	
 	 var userNameLogin UserNameLogin
 	 var signinInput string
 	 var password string
+	 c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 	 fmt.Println("parmars is ",c.Query("loginType"))
 	 if c.Query("loginType")=="username"{
 		if err:=c.ShouldBindWith(&userNameLogin,binding.JSON);err!=nil{
@@ -34,6 +36,7 @@ func Signin(c *gin.Context){
 		signinInput=userNameLogin.SigninInput
 		password=userNameLogin.Password
 	}
+	fmt.Println(signinInput,"88888888888888888888888888888")
 	var user *model.User
 	var err error
 	if user,err =dao.SelectUserMysql(signinInput);err!=nil{
@@ -72,6 +75,7 @@ func Signin(c *gin.Context){
 			fmt.Println(err.Error())
 			return 
 		}
+		
 		c.JSON(http.StatusOK,gin.H{
 			"errNo":200,
 			"msg":"success",

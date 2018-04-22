@@ -25,6 +25,7 @@ func RefreshTokenCookie(c *gin.Context)  {
 			Secure:false,
 			HttpOnly:false,
 		}
+		// c.SetCookie()
 		http.SetCookie(c.Writer,cookie)
 		// c.SetCookie(....)未生效
 		fmt.Println("重新设置token",cookie.Name)
