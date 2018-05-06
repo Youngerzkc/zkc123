@@ -2,16 +2,24 @@ version: '2'
 services: 
   mysql:
     image: mysql:5.7.4
-    ports: 
-     - "3307:3306"
+    # ports: 
+    #  - "3307:3306"
     environment: 
-      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_ROOT_PASSWORD =123456
       - MYSQL_USERNAME=root
+      - MYSQL_DATABASE=zkc123
   redis:
      image: redis
-     ports: 
-      - "6381:6379"
+    #  ports: 
+    #   - "6381:6379"
   zkc123:
     image: younger123:latest
     ports: 
     - "8888:8080"
+    links: 
+     - redis
+     - mysql
+    environment:  
+     - WORDPRESS_DB_HOST=mysql:3306
+     - WORDPRESS_DB_PASSWORD= 123456
+     - WORDPRESS_REDB_HOST= redis:6379

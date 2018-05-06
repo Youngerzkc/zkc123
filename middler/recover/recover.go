@@ -1,12 +1,12 @@
 package recover
 
 import (
-	"github.com/gin-gonic/gin"
+	// "github.com/gin-gonic/gin"
 )
 
-func Recover() gin.HandlerFunc {
+// func Recover() gin.HandlerFunc {
 
-		defer func (r *gin.Context)  {
+// 		defer func (r *gin.Context)  {
 			
-		}
-}
+// 		}
+// }

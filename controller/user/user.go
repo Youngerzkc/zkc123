@@ -147,3 +147,24 @@ func Signout(c *gin.Context) {
 
 
 
+// swagger:model
+type User struct {
+    // the id for this user
+    //
+    // required: true
+    // min: 1
+    ID int64 `json:"id"`
+
+    // the name for this user
+    // required: true
+    // min length: 3
+    Name string `json:"name"`
+
+    // the email address for this user
+    //
+    // required: true
+    Email int `json:"login"`
+
+    // the friends for this user
+    Friends []User `json:"friends"`
+}

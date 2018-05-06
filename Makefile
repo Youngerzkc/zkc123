@@ -12,6 +12,6 @@ run-docker-mysql:
 run-docker-redis:	
 	docker run  -d  -v $(myredis_dir):/data  -p 6381:6379 redis
 build-images:
-	
+	docker build . -t younger123 #制作web容器，运行web容器时要指定网络，3种方式 --network 
 run-docker:
 

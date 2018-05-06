@@ -15,7 +15,7 @@ import (
 func main() {
     // gin.SetMode("release")
 	var outLog io.Writer
-	var fileLog string="/tmp/zkc123.log"
+	var fileLog string="zkc123.log"
 	outLog=logs.FileLogs(fileLog)
 	ginMiddleHandLogs:=logs.NewWithWriter(outLog)
 	r:=gin.Default()
