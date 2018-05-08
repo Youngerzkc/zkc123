@@ -2,24 +2,45 @@ version: '2'
 services: 
   mysql:
     image: mysql:5.7.4
-    # ports: 
-    #  - "3307:3306"
+    ports: 
+     - "3360:3306"
+    volumes:
+      - /home/younger/project/goproject/src/github.com/zkc123/database/mysql:/var/lib/mysql
     environment: 
       - MYSQL_ROOT_PASSWORD =123456
       - MYSQL_USERNAME=root
       - MYSQL_DATABASE=zkc123
+    networks: 
+      - "net_zkc" 
   redis:
-     image: redis
-    #  ports: 
-    #   - "6381:6379"
+     image: redis:latest
+#     networks: 
+ #     - docker0
+     ports: 
+      - "6390:6379"
+     networks: 
+       - "net_zkc"
+     volumes: 
+       - /home/younger/project/goproject/src/github.com/zkc123/database/myredis/:/data  
   zkc123:
     image: younger123:latest
+ #   networks: 
+ #    - docker0
+    networks: 
+      - "net_zkc"
     ports: 
     - "8888:8080"
-    links: 
-     - redis
+    depends_on: 
      - mysql
-    environment:  
-     - WORDPRESS_DB_HOST=mysql:3306
-     - WORDPRESS_DB_PASSWORD= 123456
-     - WORDPRESS_REDB_HOST= redis:6379
+     - redis
+    # links: 
+    #  - redis
+    #  - mysql
+
+#    environment:  
+#     - WORDPRESS_DB_HOST=mysql:3306
+#     - WORDPRESS_DB_PASSWORD= 123456
+#     - WORDPRESS_REDB_HOST= redis:6379
+networks: 
+  net_zkc:
+   driver: bridge

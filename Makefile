@@ -15,3 +15,5 @@ build-images:
 	docker build . -t younger123 #制作web容器，运行web容器时要指定网络，3种方式 --network 
 run-docker:
 
+docker-compose:
+	docker-compose up -d		
